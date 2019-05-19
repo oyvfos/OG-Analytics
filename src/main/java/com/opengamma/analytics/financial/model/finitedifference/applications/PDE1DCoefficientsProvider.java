@@ -16,9 +16,12 @@ import com.opengamma.analytics.financial.model.volatility.local.LocalVolatilityS
 import com.opengamma.analytics.financial.model.volatility.local.LocalVolatilitySurfaceStrike;
 import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.function.Function;
+import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
+
+import test.FunctionSandboxTest;
 
 /**
  * 
@@ -130,6 +133,52 @@ public class PDE1DCoefficientsProvider {
 		      }
 		    };
 		
+		
+	    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c));
+	  }
+  public ConvectionDiffusionPDE1DStandardCoefficients getHullWhiteThiele(final double theta, final double kappa, final double vol, final double T) {
+
+	    final Function<Double, Double> a = new Function<Double, Double>() {
+	      @Override
+	      public Double evaluate(final Double... ts) {
+	        Validate.isTrue(ts.length == 2);
+	        //final double r = ts[1];
+	        final double temp =  vol;
+	        return -0.5 * temp * temp;
+	      }
+	    };
+
+	    final Function<Double, Double> b = new Function<Double, Double>() {
+	      @Override
+	      public Double evaluate(final Double... ts) {
+	        Validate.isTrue(ts.length == 2);
+	        
+	        final double r = ts[1];
+	        return -(theta - kappa*r);
+	      }
+	    };
+	    final Function<Double, Double> c = new Function<Double, Double>() {
+		      @Override
+		      public Double evaluate(final Double... ts) {
+		        //Validate.isTrue(ts.length == 2);
+		    	  final double t = ts[0];
+			      final double r = ts[1];
+			       Function1D<Double, Double> q = FunctionSandboxTest.funcs().get(0);
+			       
+		        return (q.evaluate(t)+r+r*q.evaluate(t));
+		      }
+		    };
+		    final Function<Double, Double> d = new Function<Double, Double>() {
+			      @Override
+			      public Double evaluate(final Double... ts) {
+			        //Validate.isTrue(ts.length == 2);
+			        final double t = ts[0];
+			        final double r = ts[1];
+			        Function1D<Double, Double> prem = FunctionSandboxTest.funcs().get(1);
+			        Function1D<Double, Double> q = FunctionSandboxTest.funcs().get(0);
+			        return prem.evaluate(t)*(1+q.evaluate(t)+r*q.evaluate(t));
+			      }
+			    };
 		
 	    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c));
 	  }
