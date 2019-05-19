@@ -179,13 +179,14 @@ public class ThetaMethodFiniteDifference implements ConvectionDiffusionPDESolver
         final double[] y = new double[_nNodesX];
         //main part of RHS
         for (int ii = 1; ii < _nNodesX - 1; ii++) { //tri-diagonal form
-          y[ii] = (1 - (1 - _theta) * dt * cDag[ii - 1]) * h[ii] - (1 - _theta) * dt * (lDag[ii - 1] * h[ii - 1] + +uDag[ii - 1] * h[ii + 1]);
+          //y[ii] = (1 - (1 - _theta) * dt * cDag[ii - 1]) * h[ii] - (1 - _theta) * dt * (lDag[ii - 1] * h[ii - 1] + +uDag[ii - 1] * h[ii + 1]);
+          y[ii]=h[ii]+0.001*dt;
         }
 
         t = _grid.getTimeNode(jj + 1);
         //lower & upper boundaries
-        y[0] = _lower.getConstant(_coeff, t);
-        y[_nNodesX - 1] = _upper.getConstant(_coeff, t);
+        //y[0] = _lower.getConstant(_coeff, t);
+        //y[_nNodesX - 1] = _upper.getConstant(_coeff, t);
 
         //put the LHS of system in tri-diagonal form
         final double[] d = new double[_nNodesX]; //main diag

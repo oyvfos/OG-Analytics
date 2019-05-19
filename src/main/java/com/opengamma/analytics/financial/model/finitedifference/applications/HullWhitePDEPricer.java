@@ -308,9 +308,10 @@ public class HullWhitePDEPricer {
 		 * ThetaMethodFiniteDifference(theta[ii], true); res = (PDEFullResults1D)
 		 * solver.solve(data); }
 		 */
-      System.out.println(res.getFunctionValue(index,100/2-1));
-      System.out.println(SandBox.price((double)(T/2), (double)T, r0));
+      int tnodes = grid[0].getTimeNodes().length-1;
+      System.out.println("mid:" +res.getFunctionValue(index,36));
+      //System.out.println(SandBox.price((double)(T/2), (double)T, r0));
 
-    return res.getFunctionValue(index,99);
+    return res.getFunctionValue(index,tnodes);
   }
 }
