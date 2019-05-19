@@ -167,6 +167,7 @@ public class ThetaMethodFiniteDifference implements ConvectionDiffusionPDESolver
         final double a = _coeff.getA(t, x);
         final double b = _coeff.getB(t, x);
         final double c = _coeff.getC(t, x);
+        
         cDag[ii] = _x2nd[ii][1] * a + _x1st[ii][1] * b + c;
         lDag[ii] = _x2nd[ii][0] * a + _x1st[ii][0] * b;
         uDag[ii] = _x2nd[ii][2] * a + _x1st[ii][2] * b;
@@ -180,7 +181,7 @@ public class ThetaMethodFiniteDifference implements ConvectionDiffusionPDESolver
         //main part of RHS
         for (int ii = 1; ii < _nNodesX - 1; ii++) { //tri-diagonal form
           //y[ii] = (1 - (1 - _theta) * dt * cDag[ii - 1]) * h[ii] - (1 - _theta) * dt * (lDag[ii - 1] * h[ii - 1] + +uDag[ii - 1] * h[ii + 1]);
-          y[ii]=h[ii]+0.001*dt;
+          y[ii]=h[ii]+_coeff.getD(jj, ii)*dt;
         }
 
         t = _grid.getTimeNode(jj + 1);

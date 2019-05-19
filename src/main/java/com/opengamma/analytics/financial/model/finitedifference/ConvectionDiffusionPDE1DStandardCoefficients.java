@@ -24,15 +24,18 @@ public class ConvectionDiffusionPDE1DStandardCoefficients implements ConvectionD
   private final Surface<Double, Double, Double> _a;
   private final Surface<Double, Double, Double> _b;
   private final Surface<Double, Double, Double> _c;
+  private final Surface<Double, Double, Double> _d;
 
   public ConvectionDiffusionPDE1DStandardCoefficients(final Surface<Double, Double, Double> a, final Surface<Double, Double, Double> b,
-      final Surface<Double, Double, Double> c) {
+      final Surface<Double, Double, Double> c,final Surface<Double, Double, Double> d) {
     Validate.notNull(a, "null a");
     Validate.notNull(b, "null b");
     Validate.notNull(c, "null c");
+    Validate.notNull(c, "null d");
     _a = a;
     _b = b;
     _c = c;
+    _d = d;
   }
 
   public double getA(final double t, final double x) {
@@ -46,6 +49,9 @@ public class ConvectionDiffusionPDE1DStandardCoefficients implements ConvectionD
   public double getC(final double t, final double x) {
     return _c.getZValue(t, x);
   }
+  public double getD(final double t, final double x) {
+	    return _d.getZValue(t, x);
+	  }
 
   @Override
   public int hashCode() {

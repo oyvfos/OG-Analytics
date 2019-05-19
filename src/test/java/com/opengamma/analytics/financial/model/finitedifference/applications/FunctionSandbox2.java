@@ -6,7 +6,7 @@ import com.opengamma.analytics.math.interpolation.data.ArrayInterpolator1DDataBu
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDoubleQuadraticDataBundle;
 import com.opengamma.util.csv.CSVDocumentReader;
 
-public class FunctionSandboxTest {
+public class FunctionSandbox2 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

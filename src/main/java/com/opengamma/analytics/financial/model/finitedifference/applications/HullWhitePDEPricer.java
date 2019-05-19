@@ -262,7 +262,7 @@ public class HullWhitePDEPricer {
 
     //final double q = r - b;
     //final ConvectionDiffusionPDE1DStandardCoefficients coef = PDE.getHullWhiteTR(thetaHW, kappa, sigma,T);
-    final ConvectionDiffusionPDE1DStandardCoefficients coef = PDE.getHullWhite(thetaHW, kappa, sigma);
+    final ConvectionDiffusionPDE1DStandardCoefficients coef = PDE.getHullWhiteThiele(thetaHW, kappa, sigma);
     //final Function1D<Double, Double> payoff = ICP.getEuropeanPayoff(k, isCall);
 
     BoundaryCondition lower;
