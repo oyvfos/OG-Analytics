@@ -21,8 +21,6 @@ import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.analytics.math.surface.Surface;
 
-import test.FunctionSandboxTest;
-
 /**
  * 
  */
