@@ -16,7 +16,7 @@ public class SandBox {
           
         }
       };
-      final static Function<Double, Double> B = new Function<Double, Double>() {
+      final public static Function<Double, Double> B = new Function<Double, Double>() {
           @Override
           public Double evaluate(final Double... ts) { 
             final double t = ts[0];
@@ -50,5 +50,9 @@ public class SandBox {
 		// TODO Auto-generated method stub
 		
 		return Z.evaluate(new Double[] {t,T,r0});
+	}
+	public static double B(double t, double T) {
+		// TODO Auto-generated method stub
+		return B.evaluate(t,T);
 	}
 }

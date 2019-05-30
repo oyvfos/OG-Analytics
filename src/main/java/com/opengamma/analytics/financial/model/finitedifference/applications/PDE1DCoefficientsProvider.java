@@ -66,6 +66,7 @@ public class PDE1DCoefficientsProvider {
 
     return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), ConstantDoublesSurface.from(rate));
   }
+  */
   public ConvectionDiffusionPDE1DStandardCoefficients getHullWhite(final double theta, final double kappa, final double vol) {
 
 	    final Function<Double, Double> a = new Function<Double, Double>() {
@@ -94,11 +95,11 @@ public class PDE1DCoefficientsProvider {
 		        return r;
 		      }
 		    };
+		 double d = 0;
 		
-		
-	    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c));
-	  }*/
-/* private static final SandBox zeroP= new SandBox();
+	    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),ConstantDoublesSurface.from(d));
+	  }
+ private static final SandBox zeroP= new SandBox();
   public ConvectionDiffusionPDE1DStandardCoefficients getHullWhiteTR(final double theta, final double kappa, final double vol, final double T) {
 
 	    final Function<Double, Double> a = new Function<Double, Double>() {
@@ -119,24 +120,30 @@ public class PDE1DCoefficientsProvider {
 	        final double r = ts[1];
 	        
 	        
-	        return -(theta - kappa*r+ vol*vol*SandBox.price(t,T,r));
+	        return -(theta - kappa*r+ vol*vol*SandBox.B(t,T));
 	      }
 	    };
-	    final Function<Double, Double> c = new Function<Double, Double>() {
+	    //final Function1D<Double, Double> q = PolicyFuncs.funcs().get(0);
+		//final Function1D<Double, Double> prem = PolicyFuncs.funcs().get(1);
+	    final Function<Double, Double> d = new Function<Double, Double>() {
 		      @Override
 		      public Double evaluate(final Double... ts) {
 		        //Validate.isTrue(ts.length == 2);
 		        //final double r = ts[1];
-		        return 0d;
+		    	  
+		    	  final double t = ts[0];
+			        final double r = ts[1];
+			        //double d0=(prem.evaluate(t)*(1+ q.evaluate(t)+r+r*q.evaluate(t)));
+		        return -.7/SandBox.price(t,T,r);
 		      }
 		    };
 		
-		
-	    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c));
+		double c = 0.0;
+	    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), ConstantDoublesSurface.from(c),FunctionalDoublesSurface.from(d));
 	  }
-*/  public ConvectionDiffusionPDE1DStandardCoefficients getHullWhiteThiele(final double theta, final double kappa, final double vol) {
-	  final Function1D<Double, Double> q = FunctionSandboxTest.funcs().get(0);
-	  final Function1D<Double, Double> prem = FunctionSandboxTest.funcs().get(1);
+  public ConvectionDiffusionPDE1DStandardCoefficients getHullWhiteThieleTR(final double theta, final double kappa, final double vol, final double T) {
+	  final Function1D<Double, Double> q = PolicyFuncs.funcs().get(0);
+	  final Function1D<Double, Double> prem = PolicyFuncs.funcs().get(1);
 	    final Function<Double, Double> a = new Function<Double, Double>() {
 	      @Override
 	      public Double evaluate(final Double... ts) {
@@ -153,7 +160,9 @@ public class PDE1DCoefficientsProvider {
 	        Validate.isTrue(ts.length == 2);
 	        
 	        final double r = ts[1];
-	        return -(theta - kappa*r);
+	        final double t = ts[0];
+	        return -(theta - kappa*r+ vol*vol*SandBox.B(t,T));
+	        
 	      }
 	    };
 	    final Function<Double, Double> c = new Function<Double, Double>() {
@@ -164,7 +173,7 @@ public class PDE1DCoefficientsProvider {
 			      final double r = ts[1];
 			      
 			       
-		        return (q.evaluate(t)+r+r*q.evaluate(t));
+		        return +(q.evaluate(t)+r*q.evaluate(t));
 		      }
 		    };
 		    final Function<Double, Double> d = new Function<Double, Double>() {
@@ -175,7 +184,55 @@ public class PDE1DCoefficientsProvider {
 			        final double r = ts[1];
 			        
 			        
-			        return prem.evaluate(t)*(1+q.evaluate(t)+r*q.evaluate(t));
+			        return +(prem.evaluate(t)*(1+ q.evaluate(t)+r+r*q.evaluate(t)))/SandBox.price(t,T,r);
+			      }
+			    };
+		
+	    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),FunctionalDoublesSurface.from(d));
+	  }
+
+  public ConvectionDiffusionPDE1DStandardCoefficients getHullWhiteThiele(final double theta, final double kappa, final double vol) {
+	  final Function1D<Double, Double> q = PolicyFuncs.funcs().get(0);
+	  final Function1D<Double, Double> prem = PolicyFuncs.funcs().get(1);
+	    final Function<Double, Double> a = new Function<Double, Double>() {
+	      @Override
+	      public Double evaluate(final Double... ts) {
+	        Validate.isTrue(ts.length == 2);
+	        //final double r = ts[1];
+	        final double temp =  vol;
+	        return 0.5 * temp * temp;
+	      }
+	    };
+
+	    final Function<Double, Double> b = new Function<Double, Double>() {
+	      @Override
+	      public Double evaluate(final Double... ts) {
+	        Validate.isTrue(ts.length == 2);
+	        
+	        final double r = ts[1];
+	        return (theta - kappa*r);
+	      }
+	    };
+	    final Function<Double, Double> c = new Function<Double, Double>() {
+		      @Override
+		      public Double evaluate(final Double... ts) {
+		        //Validate.isTrue(ts.length == 2);
+		    	  final double t = ts[0];
+			      final double r = ts[1];
+			      
+			       
+		        return +(q.evaluate(t)+r+r*q.evaluate(t));
+		      }
+		    };
+		    final Function<Double, Double> d = new Function<Double, Double>() {
+			      @Override
+			      public Double evaluate(final Double... ts) {
+			        //Validate.isTrue(ts.length == 2);
+			        final double t = ts[0];
+			        final double r = ts[1];
+			        
+			        
+			        return +(prem.evaluate(t)*(1+ q.evaluate(t)+r+r*q.evaluate(t)));
 			      }
 			    };
 		

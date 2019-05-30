@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 public class HullWhitePDEPricer {
 
   private static final InitialConditionsProvider ICP = new InitialConditionsProvider();
-  private static final PDE1DCoefficientsProvider PDE = new PDE1DCoefficientsProvider();
+  
   /*
    * Crank-Nicolson (i.e. theta = 0.5) is known to give poor results around at-the-money. This can be solved by using a short fully implicit (theta = 1.0) burn-in period.
    * Eigenvalues associated with the discontinuity in the first derivative are not damped out when theta = 0.5, but are for theta = 1.0 - the time step for this phase should be
@@ -237,7 +237,7 @@ public class HullWhitePDEPricer {
    * @param theta the theta to use on different grids
    * @return The option price
    */
-  public double price(final double r0,  final int T,final double rMax,final double rMin, final double sigma, final double thetaHW,final double kappa, final PDEGrid1D[] grid, final double[] theta) {
+  public PDEFullResults1D price(final double r0,  final int T,final double rMax,final double rMin, final double sigma, final double thetaHW,final double kappa,final Function1D<Double, Double> initial ,final ConvectionDiffusionPDE1DStandardCoefficients  coef, final PDEGrid1D[] grid, final double[] theta) {
 
     final int n = grid.length;
     ArgumentChecker.isTrue(n == theta.length, "#theta does not match #grid");
@@ -261,8 +261,7 @@ public class HullWhitePDEPricer {
     ArgumentChecker.isTrue(index >= 0, "cannot find spot on grid");
 
     //final double q = r - b;
-    //final ConvectionDiffusionPDE1DStandardCoefficients coef = PDE.getHullWhiteTR(thetaHW, kappa, sigma,T);
-    final ConvectionDiffusionPDE1DStandardCoefficients coef = PDE.getHullWhiteThiele(thetaHW, kappa, sigma);
+    
     //final Function1D<Double, Double> payoff = ICP.getEuropeanPayoff(k, isCall);
 
     BoundaryCondition lower;
@@ -287,12 +286,7 @@ public class HullWhitePDEPricer {
         };
         lower = new NeumannBoundaryCondition(downFunc, sMin, true);
         
-        final Function1D<Double, Double> initial = new Function1D<Double, Double>() {
-            @Override
-            public Double evaluate(final Double time) {
-              return 1d;
-            }
-          };
+        
      //final FunctionalDoublesSurface free = new FunctionalDoublesSurface(func);
 
       PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, initial, lower, upper, grid[0]);
@@ -308,10 +302,9 @@ public class HullWhitePDEPricer {
 		 * ThetaMethodFiniteDifference(theta[ii], true); res = (PDEFullResults1D)
 		 * solver.solve(data); }
 		 */
-      int tnodes = grid[0].getTimeNodes().length-1;
-      System.out.println("mid:" +res.getFunctionValue(index,36));
+      
       //System.out.println(SandBox.price((double)(T/2), (double)T, r0));
 
-    return res.getFunctionValue(index,tnodes);
+    return res;
   }
 }

@@ -10,15 +10,10 @@ public class FunctionSandbox {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		double[] yValues = new double[] {1., 2., 3. };
-
-	    double[] xValues = new double[] {1., 2., 3. };
-		ArrayInterpolator1DDataBundle bundle = new ArrayInterpolator1DDataBundle(xValues, yValues);
-		DoubleQuadraticInterpolator1D interp = new DoubleQuadraticInterpolator1D();
-		Interpolator1DDoubleQuadraticDataBundle bundle0 = interp.getDataBundleFromSortedArrays(xValues,yValues);
-		Function1D<Double, Double> fun = interp.getFunction(bundle0);
-		fun.evaluate(1.5);
-		CSVDocumentReader _csvDocReader = new CSVDocumentReader(FunctionSandbox.class.getResource("/test/data/d.csv"));
+		Function1D<Double, Double> f1 = PolicyFuncs.funcs().get(0);
+		 for (int i = 0; i < 112; i++) {
+		        System.out.println(f1.evaluate((double)i));
+		      }
 	}
 
 }
