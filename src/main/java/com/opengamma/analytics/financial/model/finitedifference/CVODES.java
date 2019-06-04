@@ -96,7 +96,7 @@ public class CVODES {
 	private double[] solveCVODES(double t0, double[] y0, double t1, double[] y1)
 				throws DerivativeException, IntegratorException {
 			assert y0.length == y1.length;
-					while (true) {
+		while (true) {
 			// perform actual integration
 			DoubleByReference t = new DoubleByReference();
 			long startTime = System.currentTimeMillis();

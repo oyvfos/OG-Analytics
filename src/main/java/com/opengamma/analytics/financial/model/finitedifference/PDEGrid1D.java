@@ -115,7 +115,7 @@ public class PDEGrid1D {
       _x2nd[i][1] = -2 / _dx[i] / _dx[i + 1];
       _x2nd[i][2] = 2 / _dx[i + 1] / (_dx[i] + _dx[i + 1]);
     }
-
+   
     _x1stFwd = new double[xNodes - 1][2];
     _x1stBkd = new double[xNodes - 1][2];
     for (int i = 0; i < xNodes - 1; i++) {

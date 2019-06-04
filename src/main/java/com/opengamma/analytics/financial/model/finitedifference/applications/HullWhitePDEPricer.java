@@ -8,14 +8,14 @@ package com.opengamma.analytics.financial.model.finitedifference.applications;
 import java.util.Arrays;
 
 import com.opengamma.analytics.financial.model.finitedifference.BoundaryCondition;
+import com.opengamma.analytics.financial.model.finitedifference.CVODEmethod;
 import com.opengamma.analytics.financial.model.finitedifference.ConvectionDiffusionPDE1DCoefficients;
 import com.opengamma.analytics.financial.model.finitedifference.ConvectionDiffusionPDE1DStandardCoefficients;
 import com.opengamma.analytics.financial.model.finitedifference.NeumannBoundaryCondition;
 import com.opengamma.analytics.financial.model.finitedifference.PDE1DDataBundle;
 import com.opengamma.analytics.financial.model.finitedifference.PDEFullResults1D;
 import com.opengamma.analytics.financial.model.finitedifference.PDEGrid1D;
-import com.opengamma.analytics.financial.model.finitedifference.SandBox;
-import com.opengamma.analytics.financial.model.finitedifference.ThetaMethodFiniteDifference;
+import com.opengamma.analytics.financial.model.finitedifference.PDETerminalResults1D;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
@@ -290,8 +290,10 @@ public class HullWhitePDEPricer {
      //final FunctionalDoublesSurface free = new FunctionalDoublesSurface(func);
 
       PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(coef, initial, lower, upper, grid[0]);
-      ThetaMethodFiniteDifference solver = new ThetaMethodFiniteDifference(theta[0], true);
-      res = (PDEFullResults1D) solver.solve(data);
+      //ThetaMethodFiniteDifference solver = new ThetaMethodFiniteDifference(theta[0], true);
+      CVODEmethod solver2 = new CVODEmethod();
+      
+      res = (PDEFullResults1D) solver2.solve(data);
       
       
       
